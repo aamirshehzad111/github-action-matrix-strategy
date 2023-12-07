@@ -7,10 +7,16 @@ jobs:
   example_matrix:
     strategy:
       matrix:
-        #os: [ubuntu-22.04, ubuntu-20.04]
-        version: [10, 12, 14]
+        project:
+          - platform
+          - clinical
+          - patient
+          - revcycle
+        environment:
+          - staging
+        ingress_url: ['ui.staging.psychplus.dev']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.version }}
+          node-version: ${{ matrix.project }}
