@@ -19,9 +19,14 @@ jobs:
           image_tag="v-$build_version"
           
 
-          echo "image_tag=$image_tag" >> env.GITHUB_OUTPUT
-          echo "build_version=$build_version" >> env.GITHUB_OUTPUT
-          echo "build_full_version=$build_full_version" >> env.GITHUB_OUTPUT
+          echo "image_tag=$image_tag" >> {{ env.GITHUB_OUTPUT }}
+          echo "output image_tag: $image_tag"
+
+          echo "build_version=$build_version" >> {{ env.GITHUB_OUTPUT }}
+          echo $build_version
+
+          echo "build_full_version=$build_full_version" >> {{ env.GITHUB_OUTPUT }}
+          echo $build_full_version
     outputs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
