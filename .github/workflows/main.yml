@@ -1,3 +1,4 @@
+
 on:
   push:
 
@@ -21,18 +22,16 @@ jobs:
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           image_tag="v-$build_version"
-          
-
-          echo "image_tag=$image_tag" >> env.GITHUB_OUTPUT
-          echo "build_version=$build_version" >> env.GITHUB_OUTPUT
-          echo "build_full_version=$build_full_version" >> env.GITHUB_OUTPUT
-
-
+          echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
+          echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
+          echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
   check_variables:
     needs: build_variables
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - name: Extract Tag Name
+      - name: Check Variables
         run: |
-          echo ${{ needs.build_variables.outputs.image_tag }}
+          echo "Image Tag: ${{ needs.build_variables.outputs.image_tag }}"
+          echo "Build Version: ${{ needs.build_variables.outputs.build_version }}"
+          echo "Build Full Version: ${{ needs.build_variables.outputs.build_full_version }}"
