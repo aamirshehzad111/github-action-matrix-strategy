@@ -10,7 +10,7 @@ jobs:
         id: build_variables
         shell: pwsh
         run: |
-          $tag = '${{ github.ref }}'
+          $tag = "v-1.7.116-rc.7"
           echo "found TAG: $tag"
           
           $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)\.(?<precounter>0|[1-9]\d*))?$'
