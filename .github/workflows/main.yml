@@ -18,8 +18,7 @@ jobs:
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           image_tag="v-$build_version"
           
-          echo $build_version
-          echo $build_full_version
+
           echo "image_tag=$image_tag" >> env.GITHUB_OUTPUT
           echo "build_version=$build_version" >> env.GITHUB_OUTPUT
           echo "build_full_version=$build_full_version" >> env.GITHUB_OUTPUT
@@ -27,3 +26,11 @@ jobs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
       build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
+
+  check_variables:
+    needs: build_variables
+    environment: staging
+    steps:
+      - name: Extract Tag Name
+        run: |
+          echo $image_tag
