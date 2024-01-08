@@ -6,62 +6,26 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - name: Set Build variables
+      - name: Extract Tag Name
         id: build_variables
-        shell: pwsh
         run: |
-          $tag = "v-1.7.116-rc.7"
-          echo "found TAG: $tag"
+          tag_ref='${{ github.ref }}'
+          tag_name="v-1.7.116-rc.7"
+          echo "Tag Name: $tag_name"
+          build_ci_counter="$GITHUB_RUN_NUMBER"
+          build_unique_id=$(date +%Y%m%d%H%M%S%N)
+          build_version=$tag_name
+          build_full_version="$build_version+$build_ci_counter.$build_unique_id"
+          image_tag="v-$build_version"
           
-          $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)\.(?<precounter>0|[1-9]\d*))?$'
 
-          $hasVersion = $tag -match $versionRegex
-          if ($hasVersion -eq $false)
-          {
-            echo "No valid version found in \"$tag\". Please check the format."
-            exit 1
-          }
-
-          $build_configuration = "Release"
-          $build_major_version = $Matches.major
-          $build_minor_version = $Matches.minor
-          $build_patch_version = $Matches.patch
-          $build_prerelease_label = $Matches.prelabel
-          $build_prerelease_counter = $Matches.precounter
-          $build_ci_counter = "$env:GITHUB_RUN_NUMBER"
-          $build_unique_id = Get-Date -Format yyyyMMddHHmmssfffffff
-
-          $build_version_prefix = "$build_major_version.$build_minor_version.$build_patch_version"
-          echo "build_version_prefix=$build_version_prefix" >> $env:GITHUB_OUTPUT
-          echo "output build_version_prefix: $build_version_prefix"
-
-          if ($build_prerelease_label)
-          {
-            echo "Cannot deploy pre-release to production for \"$tag\"."
-            exit 1
-          }
-          else
-          {
-            $build_version = $build_version_prefix
-          }
-          echo "build_version=$build_version" >> $env:GITHUB_OUTPUT
-          echo "output build_version: $build_version"
-
-          $build_full_version = "$build_version+$build_ci_counter.$build_unique_id"
-          echo "build_full_version=$build_full_version" >> $env:GITHUB_OUTPUT
-          echo "output build_full_version: $build_full_version"
-
-          $build_assembly_file_version = "$build_version_prefix.$build_ci_counter"
-          echo "build_assembly_file_version=$build_assembly_file_version" >> $env:GITHUB_OUTPUT
-          echo "output build_assembly_file_version: $build_assembly_file_version"
-
-          $image_tag = "v-$build_version"
-          echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
-          echo "output image_tag: $image_tag"
+          echo "image_tag=$image_tag" >> env.GITHUB_OUTPUT
+          echo "build_version=$build_version" >> env.GITHUB_OUTPUT
+          echo "build_full_version=$build_full_version" >> env.GITHUB_OUTPUT
     outputs:
+      image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
       build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
-      image_tag: ${{ steps.build_variables.outputs.image_tag }}
 
   check_variables:
     needs: build_variables
@@ -70,4 +34,4 @@ jobs:
     steps:
       - name: Extract Tag Name
         run: |
-          echo $image_tag
+          echo ${{ steps.build_variables.outputs.image_tag }}
