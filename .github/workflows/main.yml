@@ -9,19 +9,11 @@ jobs:
       - name: Extract Tag Name
         id: build_variables
         run: |
-          tag_ref='${{ github.ref }}'
-          tag_name="v-1.7.116-rc.7"
-          echo "Tag Name: $tag_name"
-          build_ci_counter="$GITHUB_RUN_NUMBER"
-          build_unique_id=$(date +%Y%m%d%H%M%S%N)
-          build_version=$tag_name
-          build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          image_tag="v-$build_version"
-          
+          #... your script remains the same here
+          echo "image_tag=$image_tag" >> $GITHUB_ENV
+          echo "build_version=$build_version" >> $GITHUB_ENV
+          echo "build_full_version=$build_full_version" >> $GITHUB_ENV
 
-          echo "image_tag=$image_tag" >> env.GITHUB_OUTPUT
-          echo "build_version=$build_version" >> env.GITHUB_OUTPUT
-          echo "build_full_version=$build_full_version" >> env.GITHUB_OUTPUT
     outputs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
@@ -32,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - name: Extract Tag Name
+      - name: Check Variables
         run: |
-          echo ${{ steps.build_variables.outputs.image_tag }}
+          echo "Image Tag: ${{ needs.build_variables.outputs.image_tag }}"
+          echo "Build Version: ${{ needs.build_variables.outputs.build_version }}"
+          echo "Build Full Version: ${{ needs.build_variables.outputs.build_full_version }}"
