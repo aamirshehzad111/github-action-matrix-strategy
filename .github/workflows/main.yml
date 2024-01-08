@@ -29,6 +29,7 @@ jobs:
 
   check_variables:
     needs: build_variables
+    runs-on: ubuntu-latest
     environment: staging
     steps:
       - name: Extract Tag Name
