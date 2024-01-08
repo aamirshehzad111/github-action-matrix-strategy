@@ -10,9 +10,9 @@ jobs:
         id: build_variables
         run: |
           #... your script remains the same here
-          echo "image_tag=$image_tag" >> $GITHUB_ENV
-          echo "build_version=$build_version" >> $GITHUB_ENV
-          echo "build_full_version=$build_full_version" >> $GITHUB_ENV
+          echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
+          echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
+          echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
     outputs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
