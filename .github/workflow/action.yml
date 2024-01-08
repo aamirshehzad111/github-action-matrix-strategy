@@ -10,7 +10,7 @@ jobs:
         id: build_variables
         run: |
           tag_ref='${{ github.ref }}'
-          tag_name=$(echo "$tag_ref" | sed 's|refs/tags/||')
+          tag_name="v-1.7.116-rc.7"
           echo "Tag Name: $tag_name"
           build_ci_counter="$GITHUB_RUN_NUMBER"
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
