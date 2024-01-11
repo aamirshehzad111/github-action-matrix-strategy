@@ -23,6 +23,8 @@ jobs:
           tag_name: v-1.7.121
           draft: true
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish_draft_release:
     needs: create_draft_release
@@ -35,3 +37,5 @@ jobs:
           tag_name: v-1.7.121
           draft: false
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
