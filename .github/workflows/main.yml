@@ -20,6 +20,7 @@ jobs:
     environment: production
     steps:
       - name: Create draft release
+        id: create_release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v-1.7.121
@@ -33,8 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-     - uses: eregon/publish-release@v1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-        release_id: ${{ needs.create_draft_release.outputs.id }}
+      - name: Publish draft release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ needs.create_draft_release.outputs.create_release.id }}
