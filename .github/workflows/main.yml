@@ -30,6 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish_draft_release:
+    needs: create_draft_release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
