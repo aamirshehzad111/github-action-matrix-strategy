@@ -16,7 +16,9 @@ jobs:
 
       - name: Extract Branch Name
         id: branch
-        run: echo "BRANCH_NAME=$(basename $GITHUB_REF)" >> $GITHUB_ENV
+        run: |
+          echo  "git ref is : $GITHUB_REF 
+          echo "BRANCH_NAME=$(basename $GITHUB_REF)" >> $GITHUB_ENV
 
       - name: Check Branch
         run: |
