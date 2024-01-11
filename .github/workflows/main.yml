@@ -30,13 +30,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish_draft_release:
-    needs: create_draft_release
     runs-on: ubuntu-latest
-    environment: production
     steps:
-      - name: Publish draft release
-        uses: eregon/publish-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: v-1.7.121
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Get Draft Release ID
+        id: get_release_id
+        run: |
+          release_id=$(curl -s -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=100" | jq -r '.[] | select(.draft == true).id')
+          echo "Release ID: $release_id"
+          echo "::set-output name=release_id::$release_id"
+
+      - name: Publish Draft Release
+        if: steps.get_release_id.outputs.release_id != 'null'
+        run: |
+          release_id="${{ steps.get_release_id.outputs.release_id }}"
+          response=$(curl -s -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d '{"draft": false}' "https://api.github.com/repos/${{ github.repository }}/releases/$release_id")
+          if [ "$(echo "$response" | jq -r '.draft')" == "false" ]; then
+            echo "Draft release published successfully."
+          else
+            echo "Failed to publish draft release."
+            exit 1
+          fi
