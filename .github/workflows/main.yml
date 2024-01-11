@@ -23,7 +23,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v-1.7.121
+          tag_name: v-1.7.123
           draft: true
           generate_release_notes: true
         env:
