@@ -24,7 +24,6 @@ jobs:
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           tag_name="${tag_ref:2:${#tag_ref}-7}"
-          echo "Tag: $tag_name"
           image_tag="v-$tag_name"
           echo "Tag Name: $image_tag"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
