@@ -15,7 +15,7 @@ jobs:
       - name: Extract Tag Name
         id: build_variables
         run: |
-          tag_ref='v-1.1.118-next'
+          tag_ref='v-1.7.117-next'
           tag_name=$(echo "$tag_ref" | sed 's|refs/tags/||')
           tag_name="${tag_name:2}"
           echo "Tag Name: $tag_name"
@@ -24,6 +24,7 @@ jobs:
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           next_tag="${tag_name:2:${#tag_name}-5}"
+          echo "Tag: $next_tag"
           image_tag="v-$next_tag"
           echo "Tag Name: $image_tag"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
