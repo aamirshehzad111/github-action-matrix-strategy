@@ -1,56 +1,33 @@
-name: Release to Production
+name: Deploy Release To Next
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v-[0-9]+.[0-9]+.[0-9]+-next'
 
 jobs:
-  release:
-    permissions:
-      contents: write
-      discussions: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-  create_draft_release:
+  build_variables:
     runs-on: ubuntu-latest
     environment: production
+    outputs:
+      image_tag: ${{ steps.build_variables.outputs.image_tag }}
+      build_version: ${{ steps.build_variables.outputs.build_version }}
+      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
     steps:
-      - name: Create draft release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v-1.7.125
-          draft: true
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-  publish_draft_release:
-    needs: create_draft_release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Get Draft Release ID
-        id: get_release_id
+      - name: Extract Tag Name
+        id: build_variables
         run: |
-          release_id=$(curl -s -X GET -H "Authorization: token ${{ secrets.GH_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=100" | jq -r '.[] | select(.draft == true).id')
-          echo "Release ID: $release_id"
-          echo "::set-output name=release_id::$release_id"
+          tag_ref='${{ github.ref }}'
+          tag_name=$(echo "$tag_ref" | sed 's|refs/tags/||')
+          tag_name="${tag_name:2}"
+          echo "Tag Name: $tag_name"
+          build_ci_counter="$GITHUB_RUN_NUMBER"
+          build_unique_id=$(date +%Y%m%d%H%M%S%N)
+          build_version=$tag_name
+          build_full_version="$build_version+$build_ci_counter.$build_unique_id"
+          next_tag="${tag_name:2:${#tag_name}-5}"
+          image_tag="v-$next_tag"
+          echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
+          echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
+          echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
-      - name: Publish Draft Release
-        if: steps.get_release_id.outputs.release_id != 'null'
-        run: |
-          release_id="${{ steps.get_release_id.outputs.release_id }}"
-          response=$(curl -s -X PATCH -H "Authorization: token ${{ secrets.GH_TOKEN }}" -d '{"draft": false}' "https://api.github.com/repos/${{ github.repository }}/releases/$release_id")
-          if [ "$(echo "$response" | jq -r '.draft')" == "false" ]; then
-            echo "Draft release published successfully."
-          else
-            echo "Failed to publish draft release."
-            exit 1
-          fi
