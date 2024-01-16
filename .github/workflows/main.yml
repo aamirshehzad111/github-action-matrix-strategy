@@ -23,7 +23,7 @@ jobs:
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          next_tag="${tag_name:2:${#tag_name}-5}"
+          next_tag="${tag_ref:${#tag_ref}-5}"
           echo "Tag: $next_tag"
           image_tag="v-$next_tag"
           echo "Tag Name: $image_tag"
