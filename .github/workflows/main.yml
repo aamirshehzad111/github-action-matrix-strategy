@@ -23,9 +23,9 @@ jobs:
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          next_tag="${tag_ref:2:${#tag_ref}-7}"
-          echo "Tag: $next_tag"
-          image_tag="v-$next_tag"
+          tag_name="${tag_ref:2:${#tag_ref}-7}"
+          echo "Tag: $tag_name"
+          image_tag="v-$tag_name"
           echo "Tag Name: $image_tag"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
