@@ -49,6 +49,9 @@ jobs:
             exit 1
           }
 
+          echo "build_configuration=$build_configuration" >> $env:GITHUB_OUTPUT
+          echo "output build_configuration: $build_configuration"          
+
           $build_version = $build_version_prefix
           echo "build_version=$build_version" >> $env:GITHUB_OUTPUT
           echo "output build_version: $build_version"
