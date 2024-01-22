@@ -2,8 +2,8 @@ name: Build and Deploy ChangeHealth on Version Tag
 
 on:
   push:
-    tags:
-      - 'v-[0-9]+.[0-9]+.[0-9]+-ChangeHealth'
+    # tags:
+    #   - 'v-[0-9]+.[0-9]+.[0-9]+-changehealth.[0-9]+'
 
 concurrency:
   group: production-deploy
@@ -18,7 +18,7 @@ jobs:
         id: build_variables
         shell: pwsh
         run: |
-          $tag = '${{ github.ref }}'
+          $tag = 'v-1.7.126-changehealth.1'
           echo "found TAG: $tag"
           
           $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)\.(?<precounter>0|[1-9]\d*))?$'
