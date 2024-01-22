@@ -18,7 +18,7 @@ jobs:
         id: build_variables
         shell: pwsh
         run: |
-          $tag = 'refs/tags/v-1.7.126-changehealth'
+          $tag = 'refs/tags/v-1.7.127-changehealth'
           echo "found TAG: $tag"
           
           $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)(\.(?<precounter>0|[1-9]\d*))?)?$'
@@ -67,6 +67,13 @@ jobs:
           $image_tag = "v-$build_version"
           echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
           echo "output image_tag: $image_tag"
+    outputs:
+      build_configuration: ${{ steps.build_variables.outputs.build_configuration }}
+      build_version_prefix: ${{ steps.build_variables.outputs.build_version_prefix }}
+      build_version: ${{ steps.build_variables.outputs.build_version }}
+      build_assembly_file_version: ${{ steps.build_variables.outputs.build_assembly_file_version }}
+      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
+      image_tag: ${{ steps.build_variables.outputs.image_tag }}
     outputs:
       build_configuration: ${{ steps.build_variables.outputs.build_configuration }}
       build_version_prefix: ${{ steps.build_variables.outputs.build_version_prefix }}
