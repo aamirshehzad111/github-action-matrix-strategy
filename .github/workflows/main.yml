@@ -74,13 +74,6 @@ jobs:
       build_assembly_file_version: ${{ steps.build_variables.outputs.build_assembly_file_version }}
       build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
-    outputs:
-      build_configuration: ${{ steps.build_variables.outputs.build_configuration }}
-      build_version_prefix: ${{ steps.build_variables.outputs.build_version_prefix }}
-      build_version: ${{ steps.build_variables.outputs.build_version }}
-      build_assembly_file_version: ${{ steps.build_variables.outputs.build_assembly_file_version }}
-      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
-      image_tag: ${{ steps.build_variables.outputs.image_tag }}
 
   print_outputs:
     needs: build_variables
