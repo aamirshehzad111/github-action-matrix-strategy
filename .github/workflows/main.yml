@@ -43,9 +43,9 @@ jobs:
           echo "build_version_prefix=$build_version_prefix" >> $env:GITHUB_OUTPUT
           echo "output build_version_prefix: $build_version_prefix"
 
-          if ($build_prerelease_label)
+          if (!$build_prerelease_label)
           {
-            echo "This workflow should only run for GA release tags, but \"$tag\" has a pre-release indicator."
+            echo "This workflow should only run for release candidate tags, but \"$tag\" has no pre-release indicator."
             exit 1
           }
 
