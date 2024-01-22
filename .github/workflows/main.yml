@@ -18,10 +18,10 @@ jobs:
         id: build_variables
         shell: pwsh
         run: |
-          $tag = 'refs/tags/v-1.7.126-changehealth.1'
+          $tag = 'refs/tags/v-1.7.126-changehealth'
           echo "found TAG: $tag"
           
-          $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)\.(?<precounter>0|[1-9]\d*))?$'
+          $versionRegex = '^refs\/tags\/v-(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(-(?<prelabel>[a-zA-Z-][0-9a-zA-Z-]*)(\.(?<precounter>0|[1-9]\d*))?)?$'
 
           $hasVersion = $tag -match $versionRegex
           if ($hasVersion -eq $false)
