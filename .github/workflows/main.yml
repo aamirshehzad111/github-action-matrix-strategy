@@ -18,7 +18,7 @@ jobs:
         id: build_variables
         run: |
           tag_ref='${{ github.ref }}'
-          tag_name="v-1.8.126-changehealth" #$(echo "$tag_ref" | sed 's|refs/tags/||')
+          tag_name="v-1.8.126-next" #$(echo "$tag_ref" | sed 's|refs/tags/||')
           tag_name="${tag_name:2}"
           echo "Tag Name: $tag_name"
           build_ci_counter="$GITHUB_RUN_NUMBER"
